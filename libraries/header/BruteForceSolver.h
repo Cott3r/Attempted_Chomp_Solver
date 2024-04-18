@@ -26,9 +26,13 @@ public:
 
     void print_p_positions();
 
+    void print_p_position_heights();
+
     vector<size_t>* getPossibleMoves(size_t position);
 
     void solve();
+
+    size_t get_p_position_height(size_t position);
 };
 
 

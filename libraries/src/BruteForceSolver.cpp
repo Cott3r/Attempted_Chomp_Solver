@@ -43,6 +43,30 @@ void BruteForceSolver::print_p_positions()
     }
 }
 
+void BruteForceSolver::print_p_position_heights()
+{
+    for (size_t y = p_pos_width - 1; y != ~(0ull) ; --y)
+    {
+        for (size_t x = 0; x < p_pos_width; ++x)
+        {
+            if(x < y)
+            {
+                //printf("   ");
+                continue;
+            }
+
+            size_t p_pos_height = this->get_p_position_height(x + y * p_pos_width);
+
+            if(p_pos_height != ~(0ull))
+                printf("%2zu ", p_pos_height);
+            else
+                printf("__ ");
+
+        }
+        printf("\n");
+    }
+}
+
 vector<size_t>* BruteForceSolver::getPossibleMoves(size_t position)
 {
 
@@ -52,7 +76,6 @@ vector<size_t>* BruteForceSolver::getPossibleMoves(size_t position)
     position = position / p_pos_width;
     size_t z = position % p_pos_width;
 
-    //printf("  %zu, %zu, %zu\n\n", x, y, z);
     vector<size_t>* possible_moves = new vector<size_t>();
 
     //Only remove from the third row
@@ -72,7 +95,8 @@ vector<size_t>* BruteForceSolver::getPossibleMoves(size_t position)
         possible_moves->push_back(x + std::min(y, y_reduction) * p_pos_width + std::min(z, z_reduction) * p_pos_width * p_pos_width);
 
     //Remove from the third and second and first row
-    for (size_t x_reduction = 0, y_reduction = 0, z_reduction = 0; x_reduction < x || y_reduction < y || z_reduction < z; ++x_reduction, ++y_reduction, ++z_reduction)
+    //Starting at z and not 0 because removing all 3 lines at the same time is always a losing move
+    for (size_t x_reduction = z, y_reduction = z, z_reduction = z; x_reduction < x || y_reduction < y || z_reduction < z; ++x_reduction, ++y_reduction, ++z_reduction)
         possible_moves->push_back(std::min(x, x_reduction) + std::min(y, y_reduction) * p_pos_width + std::min(z, z_reduction) * p_pos_width * p_pos_width);
 
     return possible_moves;
@@ -114,4 +138,21 @@ void BruteForceSolver::solve()
             }
         }
     }
+}
+
+size_t BruteForceSolver::get_p_position_height(size_t position)
+{
+
+    size_t x = position % p_pos_width;
+    position = position / p_pos_width;
+    size_t y = position % p_pos_width;
+
+    for (size_t z = 0; z < p_pos_width ; ++z)
+    {
+        bool p_pos = p_positions.at(x + y * p_pos_width + z * p_pos_width * p_pos_width);
+        if(p_pos)
+            return z;
+    }
+
+    return ~(0ull);
 }

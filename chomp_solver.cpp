@@ -21,8 +21,9 @@ class BruteForceSolver;
 
 int main(int argc, char **argv)
 {
-    BruteForceSolver solver(3ul, 28);
+    BruteForceSolver solver(3ul, 150);
     solver.solve();
-    solver.print_p_positions();
+    solver.print_p_position_heights();
+    //solver.print_p_positions();
 
 }
